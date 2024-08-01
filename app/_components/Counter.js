@@ -4,7 +4,6 @@ import { useState } from "react";
 
 export default function Counter({ users }) {
   const [count, setCount] = useState(0);
-  console.log("🚀 ~ Counter ~ users:", users);
 
   return (
     <div>

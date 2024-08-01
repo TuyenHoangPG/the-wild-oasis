@@ -1,12 +1,16 @@
-import ReservationCard from "@/app/_components/ReservationCard";
+import ReservationList from "@/app/_components/ReservationList";
+import Spinner from "@/app/_components/Spinner";
+import { auth } from "@/app/_lib/auth";
+import { getBookings } from "@/app/_lib/data-service";
+import { Suspense } from "react";
 
 export const metadata = {
   title: "Reservations",
 };
 
-export default function Page() {
-  // CHANGE
-  const bookings = [];
+export default async function Page() {
+  const session = await auth();
+  const bookings = await getBookings(session.user.guestId);
 
   return (
     <div>
@@ -22,11 +26,9 @@ export default function Page() {
           </a>
         </p>
       ) : (
-        <ul className="space-y-6">
-          {bookings.map((booking) => (
-            <ReservationCard booking={booking} key={booking.id} />
-          ))}
-        </ul>
+        <Suspense fallback={<Spinner />}>
+          <ReservationList bookings={bookings} />
+        </Suspense>
       )}
     </div>
   );
